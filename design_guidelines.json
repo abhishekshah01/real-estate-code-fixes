@@ -1,0 +1,177 @@
+{
+  "brand": {
+    "identity": "EstateX - Modern Heritage",
+    "tone": "Sophisticated, Trustworthy, Architectural, Warm, Editorial",
+    "core_concept": "The Editor's Desk - presenting properties as curated lifestyle narratives, not just database entries."
+  },
+  "colors": {
+    "palette": {
+      "primary": {
+        "name": "Spiced Clay (Brand Accent)",
+        "hex": "#EA580C",
+        "usage": "Primary Actions, Active States, Highlights (Use sparingly like a Hermès box)"
+      },
+      "secondary": {
+        "name": "Stone 900 (Charcoal)",
+        "hex": "#1C1917",
+        "usage": "Headings, Primary Text, Strong Borders"
+      },
+      "background": {
+        "main": "#FAFAF9",
+        "card": "#FFFFFF",
+        "subtle": "#F5F5F4"
+      },
+      "neutral": {
+        "text_primary": "#1C1917",
+        "text_secondary": "#78716C",
+        "border": "#E7E5E4",
+        "input_border": "#D6D3D1"
+      },
+      "feedback": {
+        "success": "#10B981",
+        "error": "#EF4444",
+        "warning": "#F59E0B"
+      }
+    },
+    "gradients": {
+      "hero_overlay": "linear-gradient(to right, rgba(28, 25, 23, 0.9) 0%, rgba(28, 25, 23, 0.4) 50%, rgba(28, 25, 23, 0) 100%)",
+      "card_overlay": "linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 40%)"
+    }
+  },
+  "typography": {
+    "headings": {
+      "family": "Playfair Display, serif",
+      "weights": {
+        "normal": 400,
+        "medium": 500
+      },
+      "tracking": "-0.025em",
+      "usage": "All H1-H6 tags. Avoid Bold (700+) unless absolutely necessary. Let the serif do the work."
+    },
+    "body": {
+      "family": "Manrope, sans-serif",
+      "weights": {
+        "light": 300,
+        "normal": 400,
+        "medium": 500
+      },
+      "usage": "Paragraphs, UI Elements, Data"
+    },
+    "labels": {
+      "family": "Manrope, sans-serif",
+      "style": "uppercase tracking-[0.2em] text-xs font-bold",
+      "usage": "Badges, Overlines, Navigation Links"
+    }
+  },
+  "layout": {
+    "spacing_scale": {
+      "section_padding": "py-24 md:py-32",
+      "element_gap": "gap-6 md:gap-8",
+      "container_padding": "px-6 md:px-12"
+    },
+    "grid_system": {
+      "bento_hero": "grid grid-cols-1 md:grid-cols-12 gap-4",
+      "property_list": "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8",
+      "agent_grid": "grid grid-cols-2 md:grid-cols-4 gap-6"
+    },
+    "container": {
+      "max_width": "max-w-[1400px]",
+      "center": "mx-auto"
+    }
+  },
+  "components": {
+    "buttons": {
+      "primary": "bg-[#EA580C] text-white hover:bg-[#C2410C] rounded-none h-12 px-8 uppercase tracking-widest text-xs font-bold transition-all hover:tracking-[0.2em]",
+      "secondary": "bg-transparent border border-stone-900 text-stone-900 hover:bg-stone-900 hover:text-white rounded-none h-12 px-8 uppercase tracking-widest text-xs font-bold transition-all",
+      "ghost": "text-[#EA580C] hover:text-[#C2410C] hover:underline underline-offset-4 font-medium"
+    },
+    "cards": {
+      "property": "group relative bg-white border border-stone-200 overflow-hidden hover:shadow-2xl transition-all duration-500 rounded-none",
+      "feature": "bg-stone-50 p-8 border border-stone-100 hover:bg-white hover:border-stone-200 transition-colors"
+    },
+    "inputs": {
+      "style": "bg-transparent border-b border-stone-300 px-0 py-3 rounded-none focus:border-[#EA580C] focus:ring-0 placeholder:text-stone-400 font-manrope text-lg"
+    },
+    "navigation": {
+      "wrapper": "fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-stone-100 h-20",
+      "link": "text-stone-500 hover:text-[#EA580C] uppercase tracking-widest text-xs font-bold transition-colors"
+    },
+    "visual_enhancers": {
+      "noise": "opacity-[0.03] pointer-events-none fixed inset-0 z-[9999] mix-blend-overlay",
+      "glass": "bg-white/80 backdrop-blur-xl border border-white/20"
+    }
+  },
+  "images": {
+    "hero": {
+      "url": "https://images.unsplash.com/photo-1737823934403-c43c450f25de?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA3MDR8MHwxfHNlYXJjaHw0fHxsdXh1cnklMjBtb2Rlcm4lMjBob21lJTIwYXJjaGl0ZWN0dXJlJTIwZXh0ZXJpb3IlMjBkdXNrfGVufDB8fHx8MTc3MzMyMjQ2Nnww&ixlib=rb-4.1.0&q=85",
+      "alt": "Luxury modern home exterior at dusk"
+    },
+    "listings": [
+      {
+        "url": "https://images.unsplash.com/photo-1676287734314-b7616c3c5e5a?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA3MDR8MHwxfHNlYXJjaHwzfHxsdXh1cnklMjBtb2Rlcm4lMjBob21lJTIwYXJjaGl0ZWN0dXJlJTIwZXh0ZXJpb3IlMjBkdXNrfGVufDB8fHx8MTc3MzMyMjQ2Nnww&ixlib=rb-4.1.0&q=85",
+        "alt": "Modern apartment building"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1738585913614-b332230120c2?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2OTV8MHwxfHNlYXJjaHwzfHxtaW5pbWFsaXN0JTIwbGl2aW5nJTIwcm9vbSUyMGludGVyaW9yJTIwZGVzaWduJTIwYmVpZ2UlMjBzdG9uZXxlbnwwfHx8fDE3NzMzMjI0Njd8MA&ixlib=rb-4.1.0&q=85",
+        "alt": "Minimalist living room"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1738585608732-49294c24ece0?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2OTV8MHwxfHNlYXJjaHwxfHxtaW5pbWFsaXN0JTIwbGl2aW5nJTIwcm9vbSUyMGludGVyaW9yJTIwZGVzaWduJTIwYmVpZ2UlMjBzdG9uZXxlbnwwfHx8fDE3NzMzMjI0Njd8MA&ixlib=rb-4.1.0&q=85",
+        "alt": "Modern bedroom with stone wall"
+      }
+    ],
+    "agents": [
+      {
+        "url": "https://images.unsplash.com/photo-1730851357916-3802b6405271?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njl8MHwxfHNlYXJjaHwzfHxwcm9mZXNzaW9uYWwlMjByZWFsJTIwZXN0YXRlJTIwYWdlbnQlMjBwb3J0cmFpdCUyMGNvbmZpZGVudHxlbnwwfHx8fDE3NzMzMjI0Njh8MA&ixlib=rb-4.1.0&q=85",
+        "alt": "Male Agent"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1770199105692-9e52ff137cad?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njl8MHwxfHNlYXJjaHwxfHxwcm9mZXNzaW9uYWwlMjByZWFsJTIwZXN0YXRlJTIwYWdlbnQlMjBwb3J0cmFpdCUyMGNvbmZpZGVudHxlbnwwfHx8fDE3NzMzMjI0Njh8MA&ixlib=rb-4.1.0&q=85",
+        "alt": "Female Agent"
+      }
+    ],
+    "about": {
+      "url": "https://images.unsplash.com/photo-1553601581-8a1f1010efbe?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzNzl8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBvZmZpY2UlMjBidWlsZGluZyUyMGdsYXNzJTIwZmFjYWRlfGVufDB8fHx8MTc3MzMyMjQ2OHww&ixlib=rb-4.1.0&q=85",
+      "alt": "Office Building"
+    },
+    "testimonials": {
+      "url": "https://images.unsplash.com/photo-1758523671826-d7f8217ffac3?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDJ8MHwxfHNlYXJjaHwzfHxoYXBweSUyMGZhbWlseSUyMG1vdmluZyUyMGludG8lMjBuZXclMjBob21lJTIwa2V5c3xlbnwwfHx8fDE3NzMzMjI0Njl8MA&ixlib=rb-4.1.0&q=85",
+      "alt": "Happy Couple"
+    }
+  },
+  "motion": {
+    "viewport_once": true,
+    "fade_up": {
+      "initial": { "opacity": 0, "y": 20 },
+      "whileInView": { "opacity": 1, "y": 0 },
+      "transition": { "duration": 0.5, "ease": "easeOut" }
+    },
+    "stagger_children": {
+      "visible": {
+        "transition": {
+          "staggerChildren": 0.1
+        }
+      }
+    }
+  },
+  "accessibility": {
+    "contrast": "Ensure all text on #EA580C backgrounds is White. Text on #FAFAF9 must be #1C1917 or #78716C.",
+    "aria": "Use aria-label for all icon-only buttons (like WhatsApp float).",
+    "focus": "All interactive elements must have visible focus rings (ring-2 ring-stone-900)."
+  },
+  "instructions_to_main_agent": [
+    "UPDATE /app/frontend/tailwind.config.js to extend colors with the new 'Stone' based palette. Use CSS variables in index.css.",
+    "REFACTOR /app/frontend/src/App.css: Replace @apply .btn-primary with reusable Tailwind classes in components. Keep the .noise-bg class.",
+    "MODIFY Typography: Ensure Playfair Display is used for Headings (font-normal) and Manrope for Body.",
+    "UPDATE Components: Refine the PropertyCard to remove heavy shadows and use the 'Clean Slate' style (border-stone-200).",
+    "LAYOUT: Implement the 'Bento' grid for the featured section and the 'Horizontal Scroll' for mobile listings.",
+    "CRITICAL: Preserve all data-testid attributes and RTL support functionality."
+  ],
+  "UNIVERSAL_GUIDELINES_FOR_MAIN_AGENT": [
+    "Do not use generic centered layouts. Use asymmetry.",
+    "Use 2-3x more spacing (py-24, py-32) than standard templates.",
+    "Never use 'Inter' for headings. Use Playfair Display.",
+    "Avoid gradients for backgrounds unless it's a subtle overlay.",
+    "All interactive elements must have micro-interactions (hover, scale, color shift)."
+  ]
+}

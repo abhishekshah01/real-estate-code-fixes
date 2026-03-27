@@ -1,0 +1,227 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ===== SCROLLBAR LAYOUT SHIFT FIX ===== */
+html {
+  overflow-y: scroll !important;
+  overflow-x: hidden;
+}
+
+* {
+  scrollbar-gutter: stable;
+}
+
+body {
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+body[data-scroll-locked],
+body[data-radix-scroll-lock],
+body[style*="overflow"],
+body[style*="margin-right"],
+body[style*="padding-right"] {
+  overflow-y: scroll !important;
+  margin-right: 0 !important;
+  padding-right: 0 !important;
+}
+
+[data-remove-scroll-bar],
+[data-radix-scroll-area-viewport] {
+  margin-right: 0 !important;
+  padding-right: 0 !important;
+}
+
+:root {
+  --color-primary: #C2410C;
+  --color-primary-hover: #9A3412;
+  --color-primary-light: #FFF7ED;
+  --color-bg: #FAFAF9;
+  --color-bg-subtle: #F5F5F4;
+  --color-surface: #FFFFFF;
+  --color-text: #1C1917;
+  --color-text-secondary: #78716C;
+  --color-text-muted: #A8A29E;
+  --color-border: #E7E5E4;
+  --color-border-strong: #D6D3D1;
+  --color-accent: #EA580C;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.6;
+}
+
+body[data-scroll-locked] {
+  margin-right: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* RTL Support */
+[dir="rtl"] {
+  font-family: 'Inter', 'Noto Sans Arabic', sans-serif;
+}
+
+[dir="rtl"] .rtl-flip {
+  transform: scaleX(-1);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Inter', sans-serif;
+  letter-spacing: -0.03em;
+  font-weight: 600;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border-strong);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-muted);
+}
+
+/* Leaflet */
+.leaflet-container {
+  font-family: 'Inter', sans-serif;
+}
+
+.custom-price-marker {
+  background: white;
+  padding: 4px 10px;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  border: 1px solid var(--color-border);
+  font-weight: 600;
+  font-size: 11px;
+  white-space: nowrap;
+  font-family: 'Inter', sans-serif;
+}
+
+.custom-price-marker.featured {
+  background: var(--color-accent);
+  color: white;
+  border-color: var(--color-accent);
+}
+
+/* Lightbox */
+.lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.6s ease-out;
+}
+
+.animate-count-up {
+  animation: countUp 0.5s ease-out;
+}
+
+/* Card Stacking */
+.card-stack-container {
+  perspective: 1200px;
+}
+
+.card-stack-item {
+  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.card-stack-item:hover {
+  transform: translateY(-12px);
+  z-index: 10;
+}
+
+/* Shadcn CSS Variables */
+@layer base {
+  :root {
+    --background: 40 20% 98%;
+    --foreground: 24 10% 4%;
+    --card: 0 0% 100%;
+    --card-foreground: 24 10% 4%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 24 10% 4%;
+    --primary: 21 90% 48%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 30 6% 90%;
+    --secondary-foreground: 24 10% 10%;
+    --muted: 30 6% 96%;
+    --muted-foreground: 25 5% 45%;
+    --accent: 38 92% 50%;
+    --accent-foreground: 0 0% 0%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 30 6% 90%;
+    --input: 30 6% 90%;
+    --ring: 21 90% 48%;
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Selection */
+::selection {
+  background: rgba(234, 88, 12, 0.15);
+  color: var(--color-text);
+}
+
+/* Smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Fix lucide-react SVG icons visibility */
+svg.lucide {
+  stroke: currentColor !important;
+}
