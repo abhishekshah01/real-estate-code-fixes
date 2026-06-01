@@ -1533,7 +1533,11 @@ async def upload_image(file: UploadFile = File(...)):
     data = await file.read()
     if len(data) > 10 * 1024 * 1024:
         raise HTTPException(status_code=400, detail="File too large. Max 10MB")
-    result = put_object(path, data, content_type)
+    try:
+        result = put_object(path, data, content_type)
+    except requests.RequestException as e:
+        logger.error(f"Image upload to storage failed: {e}")
+        raise HTTPException(status_code=502, detail="Image upload failed. Please try again.")
     return {"path": result["path"], "url": f"/api/files/{result['path']}"}
 
 @api_router.get("/files/{path:path}")
