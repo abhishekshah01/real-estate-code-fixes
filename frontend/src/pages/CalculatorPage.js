@@ -9,21 +9,6 @@ import axios from 'axios';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
-// Hoisted out of CalculatorPage so it isn't remounted each render (which dropped input focus per keystroke).
-const SliderField = ({ label, value, onChange, min, max, step, suffix, testId, inputTestId }) => (
-  <div>
-    <div className="flex items-center justify-between mb-3">
-      <label className="caption">{label}</label>
-      <div className="flex items-center gap-1">
-        <input type="number" value={value} onChange={(e) => onChange(Math.max(min, parseFloat(e.target.value) || 0))}
-          step={step} className="input-underline w-28 text-right font-semibold text-base" data-testid={inputTestId} />
-        {suffix && <span className="font-semibold text-sm text-stone-500">{suffix}</span>}
-      </div>
-    </div>
-    <Slider value={[value]} onValueChange={(val) => onChange(val[0])} min={min} max={max} step={step} data-testid={testId} />
-  </div>
-);
-
 const CalculatorPage = () => {
   const { t } = useLanguage();
 
@@ -86,6 +71,20 @@ const CalculatorPage = () => {
     finally { setSubmitting(false); }
   };
 
+  const SliderField = ({ label, value, onChange, min, max, step, suffix, testId, inputTestId }) => (
+    <div>
+      <div className="flex items-center justify-between mb-3">
+        <label className="caption">{label}</label>
+        <div className="flex items-center gap-1">
+          <input type="number" value={value} onChange={(e) => onChange(Math.max(min, parseFloat(e.target.value) || 0))}
+            step={step} className="input-underline w-28 text-right font-semibold text-base" data-testid={inputTestId} />
+          {suffix && <span className="font-semibold text-sm text-stone-500">{suffix}</span>}
+        </div>
+      </div>
+      <Slider value={[value]} onValueChange={(val) => onChange(val[0])} min={min} max={max} step={step} data-testid={testId} />
+    </div>
+  );
+
   return (
     <div className="min-h-screen bg-[#FAFAF9] pt-16 sm:pt-20" data-testid="calculator-page">
       <div className="bg-white border-b border-stone-100">
@@ -129,7 +128,7 @@ const CalculatorPage = () => {
                     <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="mt-8 pt-8 border-t border-stone-100" data-testid="mortgage-result">
                       <div className="text-center mb-8">
                         <p className="caption mb-2">{t('calculator.monthlyPayment')}</p>
-                        <p className="calculator-result" data-testid="monthly-payment">{formatCurrency(mortgageResult.monthlyPayment)}</p>
+                        <p className="calculator-result break-words" data-testid="monthly-payment">{formatCurrency(mortgageResult.monthlyPayment)}</p>
                       </div>
                       <div className="grid grid-cols-3 gap-3 text-center">
                         {[
@@ -140,7 +139,7 @@ const CalculatorPage = () => {
                           <div key={i} className="p-4 bg-stone-50 border border-stone-100">
                             <r.icon className="w-4 h-4 mx-auto mb-2 text-stone-400" />
                             <p className="text-[10px] uppercase tracking-wider text-stone-400 mb-1">{r.label}</p>
-                            <p className="font-semibold text-sm text-stone-900">{r.value}</p>
+                            <p className="font-semibold text-sm text-stone-900 break-words">{r.value}</p>
                           </div>
                         ))}
                       </div>
@@ -192,7 +191,7 @@ const CalculatorPage = () => {
                     <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="mt-8 pt-8 border-t border-stone-100" data-testid="affordability-result">
                       <div className="text-center mb-8">
                         <p className="caption mb-2">{t('calculator.maxHomePrice')}</p>
-                        <p className="text-4xl sm:text-5xl md:text-6xl font-bold text-emerald-600 tracking-tight" data-testid="max-price">{formatCurrency(affordabilityResult.maxHomePrice)}</p>
+                        <p className="text-4xl sm:text-5xl md:text-6xl font-bold text-emerald-600 tracking-tight break-words" data-testid="max-price">{formatCurrency(affordabilityResult.maxHomePrice)}</p>
                       </div>
                       <div className="grid grid-cols-3 gap-3 text-center">
                         {[
@@ -203,7 +202,7 @@ const CalculatorPage = () => {
                           <div key={i} className="p-4 bg-stone-50 border border-stone-100">
                             <r.icon className="w-4 h-4 mx-auto mb-2 text-stone-400" />
                             <p className="text-[10px] uppercase tracking-wider text-stone-400 mb-1">{r.label}</p>
-                            <p className="font-semibold text-sm text-stone-900">{r.value}</p>
+                            <p className="font-semibold text-sm text-stone-900 break-words">{r.value}</p>
                           </div>
                         ))}
                       </div>
