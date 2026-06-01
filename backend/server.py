@@ -1562,8 +1562,6 @@ async def startup_init_admin():
     existing_admin = await db.admin_users.find_one({"email": "admin@estatex.com"})
     
     if not existing_admin:
-        # Remove any old admin users
-        await db.admin_users.delete_many({})
         # Create default admin user
         admin_user = {
             "admin_id": f"admin_{uuid.uuid4().hex[:12]}",
