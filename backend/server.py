@@ -2,6 +2,7 @@ from fastapi import FastAPI, APIRouter, HTTPException, Request, Response, Depend
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
+from pymongo.errors import DuplicateKeyError
 import os
 import logging
 from pathlib import Path
@@ -940,7 +941,18 @@ async def get_stats(user: User = Depends(require_auth)):
 
 @api_router.post("/seed")
 async def seed_data():
-    """Seed initial properties, agents, and areas for demo"""
+    """Seed demo data once; a unique-_id lock serializes concurrent calls (StrictMode fires /api/seed twice) so they can't double-insert."""
+    try:
+        await db.seed_locks.insert_one({"_id": "seed"})
+    except DuplicateKeyError:
+        return {"message": "Seed already in progress"}
+    try:
+        return await _seed_data_impl()
+    finally:
+        await db.seed_locks.delete_one({"_id": "seed"})
+
+
+async def _seed_data_impl():
     messages = []
     
     # Check and seed properties
