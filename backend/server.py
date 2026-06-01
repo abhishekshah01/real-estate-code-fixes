@@ -1266,7 +1266,10 @@ async def seed_data():
             }
         ]
         await db.agents.insert_many(sample_agents)
-    
+        messages.append(f"Seeded {len(sample_agents)} agents")
+    else:
+        messages.append(f"{existing_agents} agents already exist")
+
     # Seed Areas
     existing_areas = await db.areas.count_documents({})
     if existing_areas == 0:
@@ -1393,8 +1396,11 @@ async def seed_data():
             }
         ]
         await db.areas.insert_many(sample_areas)
-    
-    return {"message": f"Seeded {len(sample_properties)} properties, agents, and areas"}
+        messages.append(f"Seeded {len(sample_areas)} areas")
+    else:
+        messages.append(f"{existing_areas} areas already exist")
+
+    return {"message": "; ".join(messages)}
 
 # ==================== EMAIL TESTING ====================
 
