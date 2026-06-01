@@ -1524,7 +1524,8 @@ MIME_TYPES = {
 
 @api_router.post("/upload")
 async def upload_image(file: UploadFile = File(...)):
-    ext = file.filename.split(".")[-1].lower() if "." in file.filename else "bin"
+    filename = file.filename or ""
+    ext = filename.rsplit(".", 1)[-1].lower() if "." in filename else "bin"
     if ext not in MIME_TYPES:
         raise HTTPException(status_code=400, detail=f"Unsupported file type: .{ext}. Allowed: jpg, jpeg, png, gif, webp")
     content_type = MIME_TYPES.get(ext, "application/octet-stream")
