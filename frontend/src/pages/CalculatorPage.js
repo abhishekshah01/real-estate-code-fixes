@@ -9,6 +9,21 @@ import axios from 'axios';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
+// Hoisted out of CalculatorPage so it isn't remounted each render (which dropped input focus per keystroke).
+const SliderField = ({ label, value, onChange, min, max, step, suffix, testId, inputTestId }) => (
+  <div>
+    <div className="flex items-center justify-between mb-3">
+      <label className="caption">{label}</label>
+      <div className="flex items-center gap-1">
+        <input type="number" value={value} onChange={(e) => onChange(Math.max(min, parseFloat(e.target.value) || 0))}
+          step={step} className="input-underline w-28 text-right font-semibold text-base" data-testid={inputTestId} />
+        {suffix && <span className="font-semibold text-sm text-stone-500">{suffix}</span>}
+      </div>
+    </div>
+    <Slider value={[value]} onValueChange={(val) => onChange(val[0])} min={min} max={max} step={step} data-testid={testId} />
+  </div>
+);
+
 const CalculatorPage = () => {
   const { t } = useLanguage();
 
@@ -70,20 +85,6 @@ const CalculatorPage = () => {
     } catch { toast.error(t('contact.error')); }
     finally { setSubmitting(false); }
   };
-
-  const SliderField = ({ label, value, onChange, min, max, step, suffix, testId, inputTestId }) => (
-    <div>
-      <div className="flex items-center justify-between mb-3">
-        <label className="caption">{label}</label>
-        <div className="flex items-center gap-1">
-          <input type="number" value={value} onChange={(e) => onChange(Math.max(min, parseFloat(e.target.value) || 0))}
-            step={step} className="input-underline w-28 text-right font-semibold text-base" data-testid={inputTestId} />
-          {suffix && <span className="font-semibold text-sm text-stone-500">{suffix}</span>}
-        </div>
-      </div>
-      <Slider value={[value]} onValueChange={(val) => onChange(val[0])} min={min} max={max} step={step} data-testid={testId} />
-    </div>
-  );
 
   return (
     <div className="min-h-screen bg-[#FAFAF9] pt-16 sm:pt-20" data-testid="calculator-page">
