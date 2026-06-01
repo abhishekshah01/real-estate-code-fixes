@@ -4,6 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useFavorites } from '../contexts/FavoritesContext';
 import { useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { MapPin, X } from 'lucide-react';
 import axios from 'axios';
 import PropertyCard from '../components/PropertyCard';
 import MapView from '../components/MapView';
