@@ -316,7 +316,10 @@ async def create_session(request: Request, response: Response):
     user_name = auth_data.get("name")
     user_picture = auth_data.get("picture")
     session_token = auth_data.get("session_token")
-    
+
+    if not user_email or not session_token:
+        raise HTTPException(status_code=502, detail="Authentication failed: incomplete data from auth service")
+
     # Check if user exists
     existing_user = await db.users.find_one({"email": user_email}, {"_id": 0})
     
