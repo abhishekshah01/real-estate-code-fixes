@@ -939,17 +939,39 @@ async def get_stats(user: User = Depends(require_auth)):
 
 # ==================== SEED DATA ====================
 
+SEED_LOCK_ID = "seed"
+SEED_LOCK_TTL = timedelta(minutes=2)  # generous upper bound on one seed run
+
+
 @api_router.post("/seed")
 async def seed_data():
-    """Seed demo data once; a unique-_id lock serializes concurrent calls (StrictMode fires /api/seed twice) so they can't double-insert."""
+    """Seed demo data once. A leased lock serializes concurrent calls (StrictMode
+    fires /api/seed twice) and self-heals: a lock left by a crashed worker is
+    reclaimed once it's older than SEED_LOCK_TTL."""
+    now = datetime.now(timezone.utc)
+    owner = uuid.uuid4().hex
+    stale_before = now - SEED_LOCK_TTL
     try:
-        await db.seed_locks.insert_one({"_id": "seed"})
+        # Acquire when free, stale, or left by an older deploy that didn't record acquired_at.
+        await db.seed_locks.update_one(
+            {
+                "_id": SEED_LOCK_ID,
+                "$or": [
+                    {"acquired_at": {"$lt": stale_before}},
+                    {"acquired_at": {"$exists": False}},
+                ],
+            },
+            {"$set": {"acquired_at": now, "owner": owner}},
+            upsert=True,
+        )
     except DuplicateKeyError:
+        # Doc exists and is fresh -> another call holds the lock.
         return {"message": "Seed already in progress"}
     try:
         return await _seed_data_impl()
     finally:
-        await db.seed_locks.delete_one({"_id": "seed"})
+        # Clear only if we still own it -- a takeover after our lease expired must not be clobbered.
+        await db.seed_locks.delete_one({"_id": SEED_LOCK_ID, "owner": owner})
 
 
 async def _seed_data_impl():
