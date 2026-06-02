@@ -2,6 +2,7 @@ from fastapi import FastAPI, APIRouter, HTTPException, Request, Response, Depend
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
+from pymongo.errors import DuplicateKeyError
 import os
 import logging
 from pathlib import Path
@@ -316,7 +317,10 @@ async def create_session(request: Request, response: Response):
     user_name = auth_data.get("name")
     user_picture = auth_data.get("picture")
     session_token = auth_data.get("session_token")
-    
+
+    if not user_email or not session_token:
+        raise HTTPException(status_code=502, detail="Authentication failed: incomplete data from auth service")
+
     # Check if user exists
     existing_user = await db.users.find_one({"email": user_email}, {"_id": 0})
     
@@ -935,9 +939,42 @@ async def get_stats(user: User = Depends(require_auth)):
 
 # ==================== SEED DATA ====================
 
+SEED_LOCK_ID = "seed"
+SEED_LOCK_TTL = timedelta(minutes=2)  # generous upper bound on one seed run
+
+
 @api_router.post("/seed")
 async def seed_data():
-    """Seed initial properties, agents, and areas for demo"""
+    """Seed demo data once. A leased lock serializes concurrent calls (StrictMode
+    fires /api/seed twice) and self-heals: a lock left by a crashed worker is
+    reclaimed once it's older than SEED_LOCK_TTL."""
+    now = datetime.now(timezone.utc)
+    owner = uuid.uuid4().hex
+    stale_before = now - SEED_LOCK_TTL
+    try:
+        # Acquire when free, stale, or left by an older deploy that didn't record acquired_at.
+        await db.seed_locks.update_one(
+            {
+                "_id": SEED_LOCK_ID,
+                "$or": [
+                    {"acquired_at": {"$lt": stale_before}},
+                    {"acquired_at": {"$exists": False}},
+                ],
+            },
+            {"$set": {"acquired_at": now, "owner": owner}},
+            upsert=True,
+        )
+    except DuplicateKeyError:
+        # Doc exists and is fresh -> another call holds the lock.
+        return {"message": "Seed already in progress"}
+    try:
+        return await _seed_data_impl()
+    finally:
+        # Clear only if we still own it -- a takeover after our lease expired must not be clobbered.
+        await db.seed_locks.delete_one({"_id": SEED_LOCK_ID, "owner": owner})
+
+
+async def _seed_data_impl():
     messages = []
     
     # Check and seed properties
@@ -1266,7 +1303,10 @@ async def seed_data():
             }
         ]
         await db.agents.insert_many(sample_agents)
-    
+        messages.append(f"Seeded {len(sample_agents)} agents")
+    else:
+        messages.append(f"{existing_agents} agents already exist")
+
     # Seed Areas
     existing_areas = await db.areas.count_documents({})
     if existing_areas == 0:
@@ -1393,8 +1433,11 @@ async def seed_data():
             }
         ]
         await db.areas.insert_many(sample_areas)
-    
-    return {"message": f"Seeded {len(sample_properties)} properties, agents, and areas"}
+        messages.append(f"Seeded {len(sample_areas)} areas")
+    else:
+        messages.append(f"{existing_areas} areas already exist")
+
+    return {"message": "; ".join(messages)}
 
 # ==================== EMAIL TESTING ====================
 
@@ -1518,7 +1561,8 @@ MIME_TYPES = {
 
 @api_router.post("/upload")
 async def upload_image(file: UploadFile = File(...)):
-    ext = file.filename.split(".")[-1].lower() if "." in file.filename else "bin"
+    filename = file.filename or ""
+    ext = filename.rsplit(".", 1)[-1].lower() if "." in filename else "bin"
     if ext not in MIME_TYPES:
         raise HTTPException(status_code=400, detail=f"Unsupported file type: .{ext}. Allowed: jpg, jpeg, png, gif, webp")
     content_type = MIME_TYPES.get(ext, "application/octet-stream")
@@ -1526,7 +1570,11 @@ async def upload_image(file: UploadFile = File(...)):
     data = await file.read()
     if len(data) > 10 * 1024 * 1024:
         raise HTTPException(status_code=400, detail="File too large. Max 10MB")
-    result = put_object(path, data, content_type)
+    try:
+        result = put_object(path, data, content_type)
+    except requests.RequestException as e:
+        logger.error(f"Image upload to storage failed: {e}")
+        raise HTTPException(status_code=502, detail="Image upload failed. Please try again.")
     return {"path": result["path"], "url": f"/api/files/{result['path']}"}
 
 @api_router.get("/files/{path:path}")
@@ -1555,8 +1603,6 @@ async def startup_init_admin():
     existing_admin = await db.admin_users.find_one({"email": "admin@estatex.com"})
     
     if not existing_admin:
-        # Remove any old admin users
-        await db.admin_users.delete_many({})
         # Create default admin user
         admin_user = {
             "admin_id": f"admin_{uuid.uuid4().hex[:12]}",
